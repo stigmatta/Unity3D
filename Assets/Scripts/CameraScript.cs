@@ -13,7 +13,6 @@ public class CameraScript : MonoBehaviour
     private float maxVerticalAngleFPV = 30f;
     private float minOffset = 2f;
     private float maxOffset = 13f;
-    private bool isFpv;
 
     public static bool isFixed = false;
     public static bool isFixedTwo = false;
@@ -37,17 +36,17 @@ public class CameraScript : MonoBehaviour
         lookAction = InputSystem.actions.FindAction("Look");
         if (lookAction != null)
             lookAction.Enable();
-        isFpv = offset.magnitude < minOffset;
+        GameState.isFpv = offset.magnitude < minOffset;
     }
 
     private void Update()
     {
-        if(isFixed && !isFixedTwo)
+        if (isFixed && !isFixedTwo)
         {
             this.transform.position = fixedCameraPosition.position;
             this.transform.rotation = fixedCameraPosition.rotation;
         }
-        else if(isFixedTwo && !isFixed)
+        else if (isFixedTwo && !isFixed)
         {
             this.transform.position = fixedCameraTwo.position;
             this.transform.rotation = fixedCameraTwo.rotation;
@@ -55,35 +54,35 @@ public class CameraScript : MonoBehaviour
         else
         {
             Vector2 zoomValue = Input.mouseScrollDelta;
-            if (zoomValue.y > 0 && !isFpv)
+            if (zoomValue.y > 0 && !GameState.isFpv)
             {
                 offset *= 0.9f;
 
                 if (offset.magnitude < minOffset)
                 {
                     offset *= 0.01f;
-                    isFpv = true;
                 }
-
             }
             else if (zoomValue.y < 0)
             {
-                if (isFpv)
+                if (GameState.isFpv)
                 {
                     offset *= minOffset / offset.magnitude;
-                    isFpv = false;
                 }
                 if (offset.magnitude < maxOffset)
                 {
                     offset *= 1.1f;
                 }
             }
+
+            GameState.isFpv = offset.magnitude < minOffset;
+
             Vector2 lookValue = lookAction.ReadValue<Vector2>();
 
             angleY += lookValue.x * sensitivityX * Time.deltaTime;
             angleX -= lookValue.y * sensitivityY * Time.deltaTime;
 
-            if (!isFpv)
+            if (!GameState.isFpv)
                 angleX = Mathf.Clamp(angleX, minVerticalAngle, maxVerticalAngle);
             else
                 angleX = Mathf.Clamp(angleX, minVerticalAngleFPV, maxVerticalAngleFPV);
@@ -91,6 +90,5 @@ public class CameraScript : MonoBehaviour
             transform.rotation = Quaternion.Euler(angleX, angleY, 0f);
             transform.position = cameraAnchor.position + Quaternion.Euler(0f, angleY, 0f) * offset;
         }
-
     }
 }
