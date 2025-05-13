@@ -62,14 +62,24 @@ public class FlashlightScript : MonoBehaviour
             Debug.Log("FlashlightScript:" + other.tag);
             charge += 1.0f;
             Destroy(other.gameObject);
-            ToasterScript.Toast($"Ви знайшли батарейку. Заряд ліхтарика поповнено до {charge:F1}",3f);
+            GameEventSystem.EmitEvent(new GameEvent
+            {
+                type="Battery",
+                toast = $"Ви знайшли батарейку. Заряд ліхтарика поповнено до {charge:F1}",
+                sound = EffectsSounds.BatteryCollected,
+            });
         }
         else if (other.gameObject.CompareTag("MiniBattery"))
         {
             Debug.Log("FlashlightScript:" + other.tag);
             charge += 0.5f;
             Destroy(other.gameObject);
-            ToasterScript.Toast($"Ви знайшли батарейку. Заряд ліхтарика поповнено до {charge:F1}", 3f);
+            GameEventSystem.EmitEvent(new GameEvent
+            {
+                type = "MiniBattery",
+                toast = $"Ви знайшли міні-батарейку. Заряд ліхтарика поповнено до {charge:F1}",
+                sound = EffectsSounds.BatteryCollected,
+            });
         }
     }
 

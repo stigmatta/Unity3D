@@ -44,7 +44,9 @@ public class KeyScript : MonoBehaviour
             {
                 type = $"isKey{keyNumber}Collected",
                 payload = isInTime,
-                toast = $"Ключ {keyNumber} знайдено. {description} двері відчинені"
+                toast = $"Ключ {keyNumber} знайдено. {description} двері відчинені",
+                sound=isInTime?
+                EffectsSounds.KeyCollectedInTime : EffectsSounds.KeyCollectedOutOfTime
             });
 
             Destroy(this.gameObject);

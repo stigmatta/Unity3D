@@ -11,7 +11,10 @@ public class GatesScript : MonoBehaviour
     private bool isKeyInserted;
     private bool isKeyCollected;
     private bool isKeyInTime;
+    private bool isOpened =false;
     private int hitCount;
+    private AudioSource openingSound1;
+    private AudioSource openingSound2;
 
     void Start()
     {
@@ -19,14 +22,22 @@ public class GatesScript : MonoBehaviour
         isKeyCollected = false;
         isKeyInTime = true;
         hitCount = 0;
+        AudioSource[] openingSounds = GetComponents<AudioSource>();
+        openingSound1 = openingSounds[0];
+        openingSound2 = openingSounds[1];
         GameEventSystem.Subscribe(OnGameEvent);
     }
     void Update()
     {
-        if (isKeyInserted && transform.localPosition.magnitude < size)
+        if (!isOpened && isKeyInserted && transform.localPosition.magnitude < size)
         {
-            Debug.Log(size);
             transform.Translate(size * Time.deltaTime / openTime * openDirection);
+            if (transform.localPosition.magnitude >= size)
+            {
+                isOpened = true;
+                (isKeyInTime ? openingSound1 : openingSound2).Stop();
+            }
+
         }
     }
 
@@ -36,8 +47,13 @@ public class GatesScript : MonoBehaviour
         {
             if (isKeyCollected)
             {
-                isKeyInserted = true;
-                openTime = isKeyInTime ? openTime1 : openTime2;
+                if (!isKeyInserted)
+                {
+                    isKeyInserted = true;
+                    openTime = isKeyInTime ? openTime1 : openTime2;
+                    (isKeyInTime?openingSound1:openingSound2).Play();
+                }
+
             }
             else
             {
