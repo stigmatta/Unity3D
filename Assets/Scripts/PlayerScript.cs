@@ -25,6 +25,6 @@ public class PlayerScript : MonoBehaviour
             camForward.Normalize();
 
         Vector3 force = camForward * moveValue.y + camRight * moveValue.x;
-        rb.AddForce(force);
+        rb.AddForce(force * Time.timeScale);
     }
 }

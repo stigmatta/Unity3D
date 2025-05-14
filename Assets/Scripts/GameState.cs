@@ -4,6 +4,39 @@ using UnityEngine;
 
 public class GameState 
 {
+    #region float effectsVolume
+    private static float _effectsVolume = 0.2f;
+    public static float effectsVolume
+    {
+        get => _effectsVolume;
+        set
+        {
+            if (_effectsVolume != value)
+            {
+                _effectsVolume = value;
+                Notify(nameof(effectsVolume));
+            }
+
+        }
+    }
+    #endregion
+
+    #region float musicVolume
+    private static float _musicVolume = 0.119f;
+    public static float musicVolume
+    {
+        get => _musicVolume;
+        set
+        {
+            if (_musicVolume != value)
+            {
+                _musicVolume = value;
+                Notify(nameof(musicVolume));
+            }
+
+        }
+    }
+    #endregion
     #region bool isDay
     private static bool _isDay = true;
     public static bool isDay
@@ -14,7 +47,7 @@ public class GameState
             if (_isDay != value)
             {
                 _isDay = value;
-                Notify(nameof(isDay));
+                Notify(nameof(isFpv));
             }
 
         }
