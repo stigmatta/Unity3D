@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class EffectsSounds
 {
     public const string KeyCollectedInTime = nameof(KeyCollectedInTime);

@@ -32,6 +32,8 @@ public class GatesScript : MonoBehaviour
             }
         }
         GameEventSystem.Subscribe(OnGameEvent);
+        GameState.AddListener(OnGameStateChanged);
+
     }
     void Update()
     {
@@ -48,11 +50,11 @@ public class GatesScript : MonoBehaviour
 
         if (openingSound1 != null && openingSound1.isPlaying)
         {
-            openingSound1.volume = Time.timeScale == 0 ? 0 : GameState.effectsVolume;
+            openingSound1.volume = Time.timeScale == 0 ? 0 : GameState.longEffectsVolume;
         }
         if (openingSound2 != null && openingSound2.isPlaying)
         {
-            openingSound2.volume = Time.timeScale == 0 ? 0 : GameState.effectsVolume;
+            openingSound2.volume = Time.timeScale == 0 ? 0 : GameState.longEffectsVolume;
         }
     }
 
@@ -108,8 +110,19 @@ public class GatesScript : MonoBehaviour
             isKeyInTime = (bool)gameEvent.payload;
         }
     }
+    private void OnGameStateChanged(string fieldName)
+    {
+        if (fieldName == null || fieldName == nameof(GameState.longEffectsVolume))
+        {
+            if(openingSound1!=null)
+                openingSound1.volume = GameState.longEffectsVolume;
+            if (openingSound2 != null)
+                openingSound2.volume = GameState.longEffectsVolume;
+        }
+    }
     private void OnDestroy()
     {
         GameEventSystem.Unsubscribe(OnGameEvent);
+        GameState.RemoveListener(OnGameStateChanged);
     }
 }

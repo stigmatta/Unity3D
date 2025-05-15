@@ -53,7 +53,7 @@ public class CameraScript : MonoBehaviour
         }
         else
         {
-            Vector2 zoomValue = Input.mouseScrollDelta;
+            Vector2 zoomValue = Input.mouseScrollDelta * Time.timeScale;
             if (zoomValue.y > 0 && !GameState.isFpv)
             {
                 offset *= 0.9f;

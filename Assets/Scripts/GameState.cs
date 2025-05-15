@@ -21,6 +21,23 @@ public class GameState
     }
     #endregion
 
+    #region float longEffectsVolume
+    private static float _longEffectsVolume = 0.1f;
+    public static float longEffectsVolume
+    {
+        get => _longEffectsVolume;
+        set
+        {
+            if (_longEffectsVolume != value)
+            {
+                _longEffectsVolume = value;
+                Notify(nameof(longEffectsVolume));
+            }
+
+        }
+    }
+    #endregion
+
     #region float musicVolume
     private static float _musicVolume = 0.119f;
     public static float musicVolume
@@ -74,10 +91,8 @@ public class GameState
     private static List<Action<string>> listeners = new List<Action<string>>();
     public static void AddListener(Action<string> listener)
     {
-        if (listener != null && !listeners.Contains(listener))
-        {
-            listeners.Add(listener);
-        }
+        listeners.Add(listener);
+        listener(null);
     }
 
     public static void RemoveListener(Action<string> listener)

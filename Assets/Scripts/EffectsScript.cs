@@ -12,13 +12,10 @@ public class EffectsScript : MonoBehaviour
         batteryCollectedSound = audioSources[1];
         keyCollectedOutOfTimeSound = audioSources[2];
         GameEventSystem.Subscribe(OnGameEvent);
+        GameState.AddListener(OnGameStateChanged);
+        OnGameStateChanged(nameof(GameState.effectsVolume));
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     private void OnGameEvent(GameEvent gameEvent)
     {
         if (gameEvent.sound != null)
@@ -41,8 +38,20 @@ public class EffectsScript : MonoBehaviour
         }
     }
 
+    private void OnGameStateChanged(string fieldName)
+    {
+        if (fieldName == null || fieldName == nameof(GameState.effectsVolume))
+        {
+            keyCollectedInTimeSound.volume = GameState.effectsVolume;
+            batteryCollectedSound.volume = GameState.effectsVolume;
+            keyCollectedOutOfTimeSound.volume = GameState.effectsVolume;
+        }
+    }
+
     private void OnDestroy()
     {
         GameEventSystem.Unsubscribe(OnGameEvent);
+        GameState.RemoveListener(OnGameStateChanged);
+
     }
 }
